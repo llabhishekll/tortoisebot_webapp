@@ -1,91 +1,95 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-    <!-- Bootstrap -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.o, shrink-to-fit=no" />
+    <link rel="icon" href="assets/robot.ico" />
+    <title>Robot Control</title>
+    <!-- bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <!-- ROS stuff -->
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- ros -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/eventemitter2/lib/eventemitter2.min.js"></script>
     <script type="text/javascript" src="https://s3.eu-west-1.amazonaws.com/rosject.io/js/roslib.min.js"></script>
-    <!-- Vuejs -->
+    <!-- vuejs -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
     <!-- css stylesheet -->
     <link rel="stylesheet" href="styles/app.css" />
 </head>
 
 <body>
-    <div id="app" class="container-fluid">
-        <div class="row">
-            <div class="col-3 text-center">
-                <div class="card mt-2">
-                    <div class="card-body">
-                        <h3>Connection status</h3>
-                        <p class="text-danger" v-if="!connected">Not connected!</p>
-                        <p class="text-success" v-if="connected">Connected!</p>
-                        <label>ROSBridge address</label>
-                        <br>
-                        <input type="text" v-model="rosbridge_address" />
-                        <br><br>
-                        <button :disabled="loading" class="btn btn-danger" @click="disconnect"
-                            v-if="connected">Disconnect!</button>
-                        <button :disabled="loading" class="btn btn-success" @click="connect" v-else>Connect!</button>
+    <div id="app">
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+            <!-- robot name -->
+            <a class="navbar-brand bi bi-robot" href="#"> {{ robot_name }}</a>
+            <div class="collapse navbar-collapse">
+                <!-- connection status -->
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link text-danger bi bi-link navbar-icon-custom" v-if="!connected"></a>
+                        <a class="nav-link text-success bi bi-link navbar-icon-custom" v-if="connected"></a>
+                    </li>
+                </ul>
+                <!-- input form -->
+                <form class="form-inline form-inline-custom mt-2 mt-md-0">
+                    <!-- input box -->
+                    <div class="input-group form-input-custom">
+                        <!-- <div class="input-group-prepend">
+                            <div class="input-group-text">@</div>
+                        </div> -->
+                        <input class="form-control mr-sm-2" type="text" v-model="rosbridge_address"
+                            placeholder="ROS Bridge Address" aria-label="Search" />
                     </div>
+                    <!-- button conditions -->
+                    <button class="btn btn-outline-danger my-2 my-sm-0" :disabled="loading" @click="disconnect"
+                        v-if="connected" type="submit">
+                        Disconnect
+                    </button>
+                    <button class="btn btn-outline-success my-2 my-sm-0" :disabled="loading" @click="connect" v-else
+                        type="submit">
+                        Connect
+                    </button>
+                </form>
+            </div>
+        </nav>
+        <!-- main view -->
+        <div class="container-fluid p-0">
+            <!-- first row -->
+            <div class="d-md-flex flex-md-equal w-100 my-md-3 pl-md-3">
+                <!-- first box -->
+                <div class="bg-dark mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white box-custom-row1">
                 </div>
-                <div class="card mt-2">
-                    <div class="card-header">
-                        <h4>
-                            Logs</h5>
-                    </div>
-                    <div class="card-body">
-                        <p v-for="log in log_array">{{ log }}</p>
-                    </div>
+                <!-- second box -->
+                <div class="bg-dark mr-md-3 px-md-5 text-center box-custom-row1">
+                </div>
+                <!-- third box -->
+                <div class="bg-dark mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center box-custom-row1">
                 </div>
             </div>
-            <div class="col-9">
-                <h3>Controls</h3>
-                <div class="row">
-                    <div class="col-4">
-                        <div class="card mt-2">
-                            <div class="card-header">
-                                <h4>Robot model</h4>
-                            </div>
-                            <div class="card-body">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-8">
-                        <div class="card mt-2">
-                            <div class="card-header">
-                                <h4>Generated Map</h4>
-                            </div>
-                            <div class="card-body">
-                            </div>
-                        </div>
-                    </div>
+            <!-- second row -->
+            <div class="d-md-flex flex-md-equal w-100 my-md-3 pl-md-3">
+                <!-- first box -->
+                <div class="bg-dark mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white box-custom-row2">
+                    <p v-for="log in log_array">{{ log }}</p>
                 </div>
-                <div class="row">
-                    <div class="col-4">
-                        <div class="card mt-2">
-                            <div class="card-header">
-                                <h4>Camera</h4>
-                            </div>
-                            <div class="card-body">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-8">
-                        <div class="card mt-2">
-                            <div class="card-header">
-                                <h4>Commands</h4>
-                            </div>
-                            <div class="card-body">
-                            </div>
-                        </div>
-                    </div>
+                <!-- second box -->
+                <div class="mr-md-3 pt-3 px-3 pt-md-5 px-md-5 box-custom-row2">
+                </div>
+                <!-- third box -->
+                <div class="bg-light mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white">
                 </div>
             </div>
         </div>
     </div>
+    <!-- footer -->
+    <footer class="footer">
+        <div class="container footer-custom">
+            <span class="text-muted">Abhishek Verma © 2024-2025</span>
+        </div>
+    </footer>
+    <!-- javascript -->
     <script type="text/javascript">
         // bug : loading app.js using <script type="text/javascript" src="scripts/app.js">
         // will having caching-related problems app.js with a Date.now() in the URL
