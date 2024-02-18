@@ -66,6 +66,14 @@ body {
     width: 120px;
 }
 
+.bg-light-custom {
+    background-color: #f6f6fa;
+}
+
+.bg-dark-custom {
+    background-color: #212529;
+}
+
 @media (min-width: 768px) {
     .flex-md-equal>* {
         -ms-flex: 1;
