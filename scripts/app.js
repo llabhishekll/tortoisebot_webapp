@@ -15,10 +15,10 @@ var app = new Vue({
     port: "9090",
 
     // odometry
-    position: { x: 0, y: 0, z: 0 },
+    position: { x: 0.0, y: 0.0, z: 0.0 },
 
     // velocity
-    velocity: { x: 0, y: 0, z: 0 },
+    velocity: { x: 0.0, y: 0.0, z: 0.0 },
 
     // 3D viewer
     viewer: null,
@@ -33,9 +33,9 @@ var app = new Vue({
     // action
     action_goal: null,
     action: {
-      goal: { position: { x: 0, y: 0, z: 0 } },
+      goal: { position: { x: 0.0, y: 0.0, z: 0.0 } },
       status: { status: 0, text: "" },
-      feedback: { position: 0, state: "idle" },
+      feedback: { position: 0.0, state: "idle" },
       result: { success: false },
     },
 
@@ -64,7 +64,7 @@ var app = new Vue({
     },
 
     // joystick
-    joystick: { x: 0, z: 0 },
+    joystick: { x: 0.0, z: 0.0 },
   },
 
   // member method
@@ -159,8 +159,8 @@ var app = new Vue({
         messageType: "geometry_msgs/Twist",
       });
       let message = new ROSLIB.Message({
-        linear: { x: x, y: 0, z: 0 },
-        angular: { x: 0, y: 0, z: z },
+        linear: { x: x, y: 0.0, z: 0.0 },
+        angular: { x: 0.0, y: 0.0, z: z },
       });
       velocity.publish(message);
     },
@@ -196,8 +196,8 @@ var app = new Vue({
       this.viewer.addObject(
         new ROS3D.Grid({
           color: "#66aee8",
-          cellSize: 0.5,
-          num_cells: 20,
+          cellSize: 0.25,
+          num_cells: 40,
         })
       );
 
@@ -241,13 +241,16 @@ var app = new Vue({
 
       // scale the canvas to fit to the map
       this.map_grid_client.on("change", () => {
+        // scale dimensions
         this.map_viewer.scaleToDimensions(
           this.map_grid_client.currentGrid.width / 5,
-          this.map_grid_client.currentGrid.height / 5
+          this.map_grid_client.currentGrid.height / 5,
         );
+        
+        // update origin
         this.map_viewer.shift(
           this.map_grid_client.currentGrid.pose.position.x + 8.0,
-          this.map_grid_client.currentGrid.pose.position.y + 8.0
+          this.map_grid_client.currentGrid.pose.position.y + 8.0,
         );
       });
     },
@@ -267,8 +270,6 @@ var app = new Vue({
         serverName: "/tortoisebot_as",
         actionName: "course_web_dev_ros/WaypointActionAction",
       });
-
-      console.log(this.action.goal);
 
       // define action goal
       this.action_goal = new ROSLIB.Goal({
@@ -304,8 +305,8 @@ var app = new Vue({
     // joystick on mouse click
     joystick_start_drag() {
       this.dragging.status = true;
-      this.dragging.x = 0;
-      this.dragging.y = 0;
+      this.dragging.x = 0.0;
+      this.dragging.y = 0.0;
     },
 
     // joystick on mouse movement
@@ -343,8 +344,8 @@ var app = new Vue({
       this.dragging_style.display = "none";
 
       // update joystick values
-      this.joystick.x = 0;
-      this.joystick.z = 0;
+      this.joystick.x = 0.0;
+      this.joystick.z = 0.0;
 
       // publish on topic
       this.publish_velocity(this.joystick.x, this.joystick.z);
@@ -364,7 +365,7 @@ var app = new Vue({
       if (this.ros != null && this.ros.isConnected) {
         this.ros.getNodes(
           (data) => {},
-          (error) => {}
+          (error) => {},
         );
       }
     }, 10000);
