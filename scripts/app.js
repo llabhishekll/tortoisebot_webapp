@@ -120,6 +120,8 @@ var app = new Vue({
       });
 
       topic_rosout.subscribe((message) => {
+        if(message.name == "") {
+        }
         this.log_array.unshift({ level: message.level, msg: message.msg });
       });
 
@@ -332,7 +334,7 @@ var app = new Vue({
 
         // update joystick values
         this.joystick.x = -1 * (this.dragging.y / 200 - 0.5);
-        this.joystick.z = +1 * (this.dragging.x / 200 - 0.5);
+        this.joystick.z = -1 * (this.dragging.x / 200 - 0.5);
 
         // publish on topic
         this.publish_velocity(this.joystick.x, this.joystick.z);
