@@ -120,9 +120,11 @@ var app = new Vue({
       });
 
       topic_rosout.subscribe((message) => {
-        if(message.name == "") {
-        }
+        if(message.name == "/tortoisebot_as" && message.level == 2) {
+            // pass
+        } else {
         this.log_array.unshift({ level: message.level, msg: message.msg });
+        };
       });
 
       // subscribe callback to odometry
