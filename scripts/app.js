@@ -274,7 +274,7 @@ var app = new Vue({
       let action_client = new ROSLIB.ActionClient({
         ros: this.ros,
         serverName: "/tortoisebot_as",
-        actionName: "course_web_dev_ros/WaypointActionAction",
+        actionName: "web_bridge/WaypointActionAction",
       });
 
       // define action goal
