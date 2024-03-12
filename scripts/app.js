@@ -60,7 +60,7 @@ var app = new Vue({
       margin: "0px",
       top: "0px",
       left: "0px",
-      display: "none",
+      display: "inline-block",
       width: "75px",
       height: "75px",
     },
@@ -308,6 +308,21 @@ var app = new Vue({
       this.action_goal.cancel();
     },
 
+    // joystick on page load
+    joystick_on_load() {
+      // reset joystick to home position
+      let ref = document.getElementById("id_drag_start_zone");
+      let minTop = ref.offsetTop - parseInt(this.dragging_style.height) / 2;
+      let maxTop = minTop + 200;
+      let top = 100.0 + minTop;
+      this.dragging_style.top = `${top}px`;
+
+      let minLeft = ref.offsetLeft - parseInt(this.dragging_style.width) / 2;
+      let maxLeft = minLeft + 200;
+      let left = 100.0 + minLeft;
+      this.dragging_style.left = `${left}px`;
+    },
+
     // joystick on mouse click
     joystick_start_drag() {
       this.dragging.status = true;
@@ -322,7 +337,6 @@ var app = new Vue({
         let ref = document.getElementById("id_drag_start_zone");
         this.dragging.x = event.offsetX;
         this.dragging.y = event.offsetY;
-        this.dragging_style.display = "inline-block";
 
         let minTop = ref.offsetTop - parseInt(this.dragging_style.height) / 2;
         let maxTop = minTop + 200;
@@ -347,7 +361,18 @@ var app = new Vue({
     joystick_stop_drag() {
       this.dragging.status = false;
       this.dragging.x = this.dragging.y = "no";
-      this.dragging_style.display = "none";
+
+      // reset joystick to home position
+      let ref = document.getElementById("id_drag_start_zone");
+      let minTop = ref.offsetTop - parseInt(this.dragging_style.height) / 2;
+      let maxTop = minTop + 200;
+      let top = 100.0 + minTop;
+      this.dragging_style.top = `${top}px`;
+
+      let minLeft = ref.offsetLeft - parseInt(this.dragging_style.width) / 2;
+      let maxLeft = minLeft + 200;
+      let left = 100.0 + minLeft;
+      this.dragging_style.left = `${left}px`;
 
       // update joystick values
       this.joystick.x = 0.0;
@@ -366,6 +391,9 @@ var app = new Vue({
   },
 
   mounted() {
+    // load joystick on page load
+    this.joystick_on_load();
+
     // update map in certain interval
     this.interval = setInterval(() => {
       if (this.ros != null && this.ros.isConnected) {
