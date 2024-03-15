@@ -42,15 +42,15 @@ var app = new Vue({
     // waypoints
     waypoints: [
       { name: "Waypoint X", x: 0.0, y: 0.0 }, // dummy waypoint
-      { name: "Waypoint 1", x: 0.55, y: -0.48 },
-      { name: "Waypoint 2", x: 0.55, y: 0.48 },
-      { name: "Waypoint 3", x: 0.23, y: 0.48 },
-      { name: "Waypoint 4", x: 0.23, y: 0.0 },
-      { name: "Waypoint 5", x: -0.15, y: 0.0 },
-      { name: "Waypoint 6", x: -0.15, y: -0.48 },
-      { name: "Waypoint 7", x: -0.50, y: -0.48 },
-      { name: "Waypoint 8", x: -0.15, y: 0.48 },
-      { name: "Waypoint 9", x: -0.50, y: 0.48 },
+      { name: "Waypoint 1", x: 0.65, y: -0.50 },
+      { name: "Waypoint 1", x: 0.65, y: 0.00 },
+      { name: "Waypoint 3", x: 0.60, y: 0.50 },
+      { name: "Waypoint 4", x: 0.25, y: 0.45 },
+      { name: "Waypoint 5", x: 0.25, y: 0.0 },
+      { name: "Waypoint 6", x: -0.15, y: -0.10 },
+      { name: "Waypoint 7", x: -0.15, y: -0.45 },
+      { name: "Waypoint 8", x: -0.15, y: 0.45 },
+      { name: "Waypoint 9", x: -0.50, y: 0.50 },
       { name: "Waypoint 0", x: 0.0, y: 0.0 },
     ],
 
